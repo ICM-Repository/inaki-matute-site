@@ -45,11 +45,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* hero */
 .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-block:7rem 2.5rem}
 .hero h1{font:400 var(--fs-h1)/.88 var(--serif);letter-spacing:-.035em;margin-left:-.04em}
-.hero h1 .l{display:block;overflow:hidden;padding-bottom:.08em}
-.hero h1 .l>span{display:block;transform:translateY(105%);animation:rise 1.3s var(--ease) forwards}
-.hero h1 .l:nth-child(2)>span{animation-delay:.1s}
-.hero h1 .l:nth-child(3)>span{animation-delay:.2s}
-.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .h1like .l{display:block;overflow:hidden;padding-bottom:.08em}
+.hero .h1like .l>span{display:block;transform:translateY(105%);animation:rise 1.3s var(--ease) forwards}
+.hero .h1like .l:nth-child(2)>span{animation-delay:.1s}
+.hero .h1like .l:nth-child(3)>span{animation-delay:.2s}
+.hero .h1like em{font-style:italic;color:var(--accent)}
 @keyframes rise{to{transform:none}}
 .hero-foot{margin-top:clamp(2rem,6vh,5rem);align-items:end;row-gap:2rem}
 .hero-foot .lead{grid-column:1/span 6;font:400 var(--fs-lead)/1.35 var(--serif);max-width:34ch}
@@ -155,5 +155,8 @@ footer{background:var(--ink);color:#b4ae9e;padding:2rem var(--gutter) 2.5rem;dis
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-  .hero h1 .l>span{transform:none}.rv{opacity:1;transform:none}
+  .hero .h1like .l>span{transform:none}.rv{opacity:1;transform:none}
 }
+
+.hero-sub{min-height:auto;padding-block:clamp(4rem,10vw,8rem) 2.5rem}
+.hero .h1like{font:400 var(--fs-h1)/.88 var(--serif);letter-spacing:-.035em;margin:0 0 0 -.04em}
