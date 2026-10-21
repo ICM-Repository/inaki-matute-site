@@ -44,8 +44,9 @@
           const img = new Image();
           img.alt = '';
           img.decoding = 'async';
-          img.onload = () => fig.appendChild(img);
-          img.src = 'images/' + fig.dataset.img + '.jpg';
+          img.onload = () => { img.width = img.naturalWidth; img.height = img.naturalHeight; fig.appendChild(img); };
+          img.onerror = () => { if (!img.dataset.fb) { img.dataset.fb = 1; img.src = 'images/' + fig.dataset.img + '.jpg'; } };
+          img.src = 'images/' + fig.dataset.img + '.webp';
         }
       }
     });
