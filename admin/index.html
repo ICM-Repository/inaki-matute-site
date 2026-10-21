@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Site editor</title>
+<style>
+:root{--bg:#fff;--ink:#1d1d1f;--mute:#6b6b70;--line:#d9d9de;--brand:#1a5fd0;--ok:#157347;--bad:#b3261e;--panel:#f5f5f7}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:16px/1.45 system-ui,Segoe UI,Arial,sans-serif;color:var(--ink);background:var(--bg);display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:8px}
+button:hover{background:var(--panel)}
+button.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+button.primary:hover{filter:brightness(1.08)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input[type=text],input[type=password],input[type=search],textarea,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 4px}
+.hide{display:none!important}
+#login{margin:auto;max-width:520px;padding:24px}
+#login h1{margin:0 0 6px;font-size:26px}
+#login p,#login li{color:var(--mute)}
+#login ol{padding-left:20px}
+#loginErr{color:var(--bad);margin-top:10px;min-height:1.4em}
+#app{flex:1;display:flex;flex-direction:column;min-height:0}
+.top{display:flex;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.top .name{font-weight:700;margin-right:auto}
+.tools{display:flex;gap:8px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+.tools button{min-width:40px;padding:6px 12px}
+.tools .sep{width:1px;height:24px;background:var(--line)}
+#status{margin-left:auto;font-size:14px;color:var(--mute)}
+#status.ok{color:var(--ok)} #status.bad{color:var(--bad)}
+.main{flex:1;display:flex;min-height:0}
+#frameWrap{flex:1;min-width:0;background:#e9e9ee;position:relative}
+#frame{width:100%;height:100%;border:0;background:#fff}
+#empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mute);padding:24px;text-align:center}
+#side{width:320px;border-left:1px solid var(--line);padding:6px 16px 16px;overflow:auto;background:#fff}
+#side h2{font-size:17px;margin:14px 0 4px}
+#side .hint{color:var(--mute);font-size:14px;margin:4px 0}
+#pages{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;z-index:10}
+#pages .box{background:#fff;border-radius:12px;max-width:640px;width:100%;max-height:86vh;display:flex;flex-direction:column;padding:16px}
+#pageList{overflow:auto;margin-top:10px;border-top:1px solid var(--line)}
+#pageList button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:10px 6px}
+#pageList small{color:var(--mute);display:block}
+#thumb{max-width:100%;max-height:180px;display:block;margin:8px 0;border:1px solid var(--line);border-radius:6px}
+@media(max-width:800px){.main{flex-direction:column}#side{width:auto;border-left:0;border-top:1px solid var(--line);max-height:38vh}}
+</style>
+</head>
+<body>
+
+<section id="login" class="hide">
+  <h1 id="loginTitle">Site editor</h1>
+  <p>Sign in to edit your pages. Click any text to type, click a picture to swap it, then press Publish.</p>
+  <ol>
+    <li>Open <b>github.com/settings/personal-access-tokens/new</b> (signed in to GitHub).</li>
+    <li>Repository access: <b>Only select repositories</b>, choose this site's repository.</li>
+    <li>Permissions: <b>Contents = Read and write</b>. Create the token and copy it.</li>
+    <li>Paste it below. It stays only in this browser.</li>
+  </ol>
+  <label for="tok">Access token</label>
+  <input id="tok" type="password" autocomplete="off" placeholder="github_pat_...">
+  <p><button id="loginBtn" class="primary">Sign in</button></p>
+  <div id="loginErr" role="alert"></div>
+</section>
+
+<section id="app" class="hide">
+  <div class="top">
+    <span class="name" id="siteName">Site editor</span>
+    <button id="pagesBtn">Pages</button>
+    <button id="viewBtn">View live page</button>
+    <button id="discardBtn" disabled>Undo all changes</button>
+    <button id="publishBtn" class="primary" disabled>Publish</button>
+    <button id="logoutBtn">Sign out</button>
+  </div>
+  <div class="tools">
+    <button id="bBtn" title="Bold (select text first)"><b>B</b></button>
+    <button id="iBtn" title="Italic (select text first)"><i>I</i></button>
+    <button id="lBtn" title="Make the selected text a link">Link</button>
+    <button id="ulBtn" title="Remove link from selected text">Unlink</button>
+    <span class="sep"></span>
+    <button id="undoBtn" title="Undo typing">Undo</button>
+    <button id="redoBtn" title="Redo typing">Redo</button>
+    <span id="status" role="status"></span>
+  </div>
+  <div class="main">
+    <div id="frameWrap">
+      <iframe id="frame" title="Page being edited"></iframe>
+      <div id="empty">Choose a page with the Pages button.</div>
+    </div>
+    <aside id="side">
+      <div id="sidePage">
+        <h2>This page</h2>
+        <label for="pTitle">Page title (browser tab and Google)</label>
+        <input type="text" id="pTitle">
+        <label for="pDesc">Short description (Google)</label>
+        <textarea id="pDesc" rows="4"></textarea>
+        <p class="hint">Click any text on the page to edit it. Click a picture or a link to change it here.</p>
+      </div>
+      <div id="sideImg" class="hide">
+        <h2>Picture</h2>
+        <img id="thumb" alt="">
+        <label for="iAlt">Description of the picture (for screen readers and Google)</label>
+        <input type="text" id="iAlt">
+        <label for="iFile">Replace with a new picture</label>
+        <input type="file" id="iFile" accept="image/*">
+        <p class="hint">Large photos are shrunk automatically.</p>
+        <p><button id="iDone">Done</button></p>
+      </div>
+      <div id="sideLink" class="hide">
+        <h2>Link</h2>
+        <label for="aHref">Where it goes</label>
+        <input type="text" id="aHref">
+        <p class="hint">Examples: https://example.com, mailto:you@example.com, or /contact/</p>
+        <p><button id="aDone">Done</button></p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<div id="pages" class="hide">
+  <div class="box">
+    <div style="display:flex;gap:8px"><input type="search" id="pageFilter" placeholder="Search pages..."><button id="pagesClose">Close</button></div>
+    <div id="pageList"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>
