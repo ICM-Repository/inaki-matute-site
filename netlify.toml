@@ -18,3 +18,10 @@
   [headers.values]
     Cache-Control = "no-store"
     X-Robots-Tag = "noindex, nofollow"
+
+# One address: the free netlify.app address sends everyone (and Google) to mano.com.ph.
+[[redirects]]
+  from = "https://icmdata.netlify.app/*"
+  to = "https://mano.com.ph/:splat"
+  status = 301
+  force = true

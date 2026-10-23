@@ -1,0 +1,38 @@
+/* Inner pages (Aisla, work, about, FAQ). Uses the tokens from site.css. */
+.page{padding-top:7rem}
+.pg-head{padding-block:clamp(2rem,6vw,5rem) 1rem}
+.pg-head .crumbs a{border-bottom:1px solid transparent}
+.pg-head .crumbs a:hover{border-color:currentColor}
+.pg-head h1{font:400 clamp(2.6rem,1.2rem + 6vw,6.5rem)/.95 var(--serif);letter-spacing:-.03em;margin-top:1.2rem;max-width:18ch}
+.pg-head h1 em,.pg-cta .big em{color:var(--accent);font-style:italic}
+.pg-head .lead{font:400 var(--fs-lead)/1.35 var(--serif);max-width:42ch;margin-top:1.5rem;color:var(--ink-2)}
+.prose{max-width:880px;margin-inline:0;padding-block:2rem 3rem}
+.prose h2{font:400 clamp(1.7rem,1.2rem + 1.8vw,2.6rem)/1.05 var(--serif);letter-spacing:-.02em;margin:2.6rem 0 1rem}
+.prose h3{font:500 1.1rem/1.3 var(--sans);margin-bottom:.4rem}
+.prose p{margin-bottom:1rem;max-width:68ch}
+.prose ul,.prose ol{margin:0 0 1.2rem 1.2rem;max-width:68ch}
+.prose li{margin-bottom:.55rem}
+.prose a{border-bottom:1px solid var(--accent)}
+.prose a:hover{color:var(--accent)}
+.hero-fig{margin:0 0 2rem}
+.hero-fig img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.4rem;margin:1.2rem 0 2rem;max-width:none}
+.cards article{border-top:1px solid var(--rule);padding-top:1rem}
+.cards figure img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;margin-bottom:.8rem}
+.faq details{border-top:1px solid var(--rule);padding:1rem 0}
+.faq details:last-child{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;font:400 clamp(1.25rem,1rem + 1vw,1.7rem)/1.2 var(--serif);list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";float:right;color:var(--accent)}
+.faq details[open] summary::after{content:"\2212"}
+.faq details p{margin:.8rem 0 0}
+.pg-cta{padding-block:3rem;border-top:1px solid var(--rule)}
+.pg-cta .big{font:400 clamp(2rem,1rem + 3.5vw,4rem)/1 var(--serif);letter-spacing:-.02em;margin:1rem 0 1.6rem}
+.pg-cta .btn{display:inline-flex;margin-right:.8rem;margin-bottom:.8rem}
+.pg-rel{padding-block:2rem 4rem}
+.pg-rel ul{list-style:none;padding:0;margin-top:1rem;display:flex;flex-wrap:wrap;gap:.6rem 1.6rem}
+.pg-rel a{border-bottom:1px solid var(--accent)}
+.home-links{display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;padding:2rem var(--gutter) 0;max-width:1680px;margin-inline:auto}
+.home-links a{border-bottom:1px solid var(--rule)}
+.home-links a:hover{border-color:var(--accent)}
+@media (max-width:600px){.page{padding-top:5.5rem}}
